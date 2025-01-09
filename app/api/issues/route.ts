@@ -1,13 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 import { PrismaClient } from "../../generated/prisma/client";
+import { createIssuesSchema } from "../../validationSchema";
 const prisma = new PrismaClient();
-
-const createIssuesSchema = z.object({
-  title: z.string().min(3).max(255),
-  description: z.string().min(10),
-  status: z.enum(["OPEN", "IN_PROGRESS", "CLOSED"]).optional(),
-});
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
