@@ -74,7 +74,6 @@ function NewIssuesPage() {
           } catch (error) {
             setError("Failed to create issue. Please try again.");
             console.error("Error creating issue:", error);
-            // TODO: Add state to show an error message to the user
           }
         })}
       >
