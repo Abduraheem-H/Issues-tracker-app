@@ -82,7 +82,7 @@ function NewIssuesPage() {
           {...register("title")}
         ></TextField.Root>
         {errors.title && (
-          <Text color="red" as="p">
+          <Text color="red" as="p" aria-live="assertive">
             {errors.title.message}
           </Text>
         )}
