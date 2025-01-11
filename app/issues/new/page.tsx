@@ -10,8 +10,10 @@ import SimpleMDE from "easymde";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssuesSchema } from "../../validationSchema";
 import { z } from "zod";
+
 // @ts-expect-error - no types available for this CSS side-effect import
 import "easymde/dist/easymde.min.css";
+import Spinner from "@/app/components/Spinner";
 
 const SimpleMdeReact = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -30,6 +32,7 @@ function NewIssuesPage() {
     resolver: zodResolver(createIssuesSchema),
   });
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const customToolbarOptions: Options = {
     toolbar: [
@@ -68,10 +71,12 @@ function NewIssuesPage() {
         className=" p-4 space-y-4"
         onSubmit={handleSubmit(async (data) => {
           try {
+            setIsSubmitting(true);
             const response = await axios.post("/api/issues", data);
             console.log("Issue created:", response.data);
             router.push("/issues");
           } catch (error) {
+            setIsSubmitting(false);
             setError("Failed to create issue. Please try again.");
             console.error("Error creating issue:", error);
           }
@@ -107,7 +112,8 @@ function NewIssuesPage() {
             {errors.description.message}
           </Text>
         )}
-        <Button>Submit New Issue</Button>
+        <Button disabled={isSubmitting}>Submit New Issue {isSubmitting && <Spinner />}</Button>
+        
       </form>
     </div>
   );
