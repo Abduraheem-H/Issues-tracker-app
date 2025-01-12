@@ -91,7 +91,6 @@ function NewIssuesPage() {
             {errors.title.message}
           </Text>
         )}
-
         <Controller
           control={control}
           name="description"
@@ -112,8 +111,9 @@ function NewIssuesPage() {
             {errors.description.message}
           </Text>
         )}
-        <Button disabled={isSubmitting}>Submit New Issue {isSubmitting && <Spinner />}</Button>
-        
+        <Button disabled={isSubmitting}>
+          Submit New Issue {isSubmitting && <Spinner />}
+        </Button>{" "}
       </form>
     </div>
   );
