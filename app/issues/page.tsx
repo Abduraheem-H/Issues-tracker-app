@@ -7,16 +7,22 @@ const IssuesPage = async () => {
 
   return (
     <div>
-      <Button>
-        <Link href="/issues/new">New Issue</Link>
-      </Button>
+      <div>
+        <Button>
+          <Link href="/issues/new">New Issue</Link>
+        </Button>
+      </div>
 
-      <Table.Root>
+      <Table.Root variant="surface" className="mt-4 w-full">
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeaderCell>Issue</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Status</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Created</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell className="hidden md:table-cell">
+              Status
+            </Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell className="hidden md:table-cell">
+              Created
+            </Table.ColumnHeaderCell>
           </Table.Row>
         </Table.Header>
 
@@ -29,12 +35,15 @@ const IssuesPage = async () => {
                   className="text-blue-600 hover:underline"
                 >
                   {issue.title}
+                  <div className="block md:hidden">{issue.status}</div>
                 </Link>
               </Table.Cell>
 
-              <Table.Cell>{issue.status}</Table.Cell>
+              <Table.Cell className="hidden md:table-cell">
+                {issue.status}
+              </Table.Cell>
 
-              <Table.Cell>
+              <Table.Cell className="hidden md:table-cell">
                 {new Date(issue.createdAt).toLocaleDateString()}
               </Table.Cell>
             </Table.Row>
