@@ -38,6 +38,7 @@ function NewIssuesPage() {
     toolbar: [
       "bold",
       "italic",
+      "heading",
       "unordered-list",
       "|",
 

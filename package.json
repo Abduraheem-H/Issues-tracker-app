@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start --port 3001",
-    "lint": "eslint"
+    "lint": "eslint",
+    "tailwind:init": "tailwindcss init --ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -22,11 +23,13 @@
     "react-hook-form": "^7.67.0",
     "react-icons": "^5.5.0",
     "react-loading-skeleton": "^3.5.0",
+    "react-markdown": "^10.1.0",
     "react-simplemde-editor": "^5.2.0",
     "zod": "^4.1.12"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
