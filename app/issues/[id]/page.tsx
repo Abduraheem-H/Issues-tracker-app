@@ -28,7 +28,7 @@ const IssueDetailPage = async ({ params }: Props) => {
         </Text>
       </Flex>
       <Card className="mt-4 prose">
-        <ReactMarkDown>{issue?.description || ""}</ReactMarkDown>
+        <ReactMarkDown>{issue?.description}</ReactMarkDown>
       </Card>
     </div>
   );
