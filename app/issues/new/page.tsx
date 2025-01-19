@@ -60,6 +60,9 @@ function NewIssuesPage() {
       "fullscreen",
     ],
   };
+  // (async () => {
+  //   await new Promise((r) => setTimeout(r, 2000));
+  // })(); // Simulate delay for loading state
 
   return (
     <div className="p-8 max-w-xl">
