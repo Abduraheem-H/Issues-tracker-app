@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import { createIssuesSchema } from "../../validationSchema";
+import { issueSchema } from "../../validationSchema";
 
 // @ts-expect-error - no types available for this CSS side-effect import
 import "easymde/dist/easymde.min.css";
@@ -19,7 +19,7 @@ const SimpleMdeReact = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
 });
 
-type IssueFormData = z.infer<typeof createIssuesSchema>;
+type IssueFormData = z.infer<typeof issueSchema>;
 
 function IssueForm({ issue }: { issue?: Issue | null }) {
   const router = useRouter();
@@ -29,7 +29,7 @@ function IssueForm({ issue }: { issue?: Issue | null }) {
     control,
     formState: { errors },
   } = useForm<IssueFormData>({
-    resolver: zodResolver(createIssuesSchema),
+    resolver: zodResolver(issueSchema),
     defaultValues: {
       title: issue?.title || "",
       description: issue?.description || "",
