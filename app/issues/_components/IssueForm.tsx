@@ -80,8 +80,17 @@ function IssueForm({ issue }: { issue?: Issue | null }) {
         onSubmit={handleSubmit(async (data) => {
           try {
             setIsSubmitting(true);
-            const response = await axios.post("/api/issues", data);
-            console.log("Issue created:", response.data);
+            if (issue) {
+              const updateResponse = await axios.patch(
+                `/api/${issue.id}`,
+                data
+              );
+              console.log("Issue Updated:", updateResponse.data);
+            } else {
+              const response = await axios.post("/api/issues", data);
+              console.log("Issue created:", response.data);
+            }
+
             router.push("/issues");
           } catch (error) {
             setIsSubmitting(false);
@@ -120,7 +129,8 @@ function IssueForm({ issue }: { issue?: Issue | null }) {
           </Text>
         )}
         <Button disabled={isSubmitting}>
-          Submit New Issue {isSubmitting && <Spinner />}
+          {issue ? "Update Issue" : "Submit New Issue"}{" "}
+          {isSubmitting && <Spinner />}
         </Button>{" "}
       </form>
     </div>
