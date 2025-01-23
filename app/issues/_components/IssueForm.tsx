@@ -92,6 +92,7 @@ function IssueForm({ issue }: { issue?: Issue | null }) {
             }
 
             router.push("/issues");
+            router.refresh();
           } catch (error) {
             setIsSubmitting(false);
             setError("Failed to create issue. Please try again.");
