@@ -1,5 +1,5 @@
-import IssueForm from "../../_components/IssueForm";
 import prisma from "@/prisma/client";
+import DynamicIssueFormWrapper from "./DynamicIssueFormWrapper";
 
 interface Props {
   params: { id: string };
@@ -11,7 +11,7 @@ const EditIssuePage = async ({ params }: Props) => {
     where: { id: parseInt(id) },
   });
 
-  return <IssueForm issue={issue} />;
+  return <DynamicIssueFormWrapper issue={issue} />;
 };
 
 export default EditIssuePage;

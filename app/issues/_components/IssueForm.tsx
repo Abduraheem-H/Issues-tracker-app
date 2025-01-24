@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Callout, Text, TextField } from "@radix-ui/themes";
 import axios from "axios";
 import SimpleMDE, { Options } from "easymde";
-import dynamic from "next/dynamic";
+import { SimpleMdeReact } from "react-simplemde-editor";
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -15,9 +15,7 @@ import "easymde/dist/easymde.min.css";
 import Spinner from "@/app/components/Spinner";
 import { Issue } from "@prisma/client";
 
-const SimpleMdeReact = dynamic(() => import("react-simplemde-editor"), {
-  ssr: false,
-});
+
 
 type IssueFormData = z.infer<typeof issueSchema>;
 
