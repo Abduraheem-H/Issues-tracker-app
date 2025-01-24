@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 // @ts-expect-error: allow side-effect import without type declarations
 import "@radix-ui/themes/styles.css";
 import "./globals.css";
-import { Theme } from "@radix-ui/themes";
+import { Theme, Container } from "@radix-ui/themes";
 import NavBar from "./NavBar";
 
 const geistSans = Geist({
@@ -33,7 +33,10 @@ export default function RootLayout({
       >
         <Theme>
           <NavBar />
-          <main>{children}</main>
+
+          <main>
+            <Container>{children}</Container>
+          </main>
         </Theme>
       </body>
     </html>
