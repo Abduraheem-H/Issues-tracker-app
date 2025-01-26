@@ -47,3 +47,38 @@ export async function PATCH(
     );
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const { id } = await params;
+    const issueId = parseInt(id);
+    if (isNaN(issueId)) {
+      return NextResponse.json(
+        { message: "Invalid issue ID" },
+        { status: 400 }
+      );
+    }
+    const existingIssue = await prisma.issue.findUnique({
+      where: { id: issueId },
+    });
+    if (!existingIssue) {
+      return NextResponse.json({ message: "Issue not found" }, { status: 404 });
+    }
+    await prisma.issue.delete({
+      where: { id: issueId },
+    });
+    return NextResponse.json(
+      { message: "Issue deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 // @ts-expect-error: allow side-effect import without type declarations
 import "@radix-ui/themes/styles.css";
+// @ts-expect-error: allow side-effect import without type declarations
 import "./globals.css";
 import { Theme, Container } from "@radix-ui/themes";
 import NavBar from "./NavBar";

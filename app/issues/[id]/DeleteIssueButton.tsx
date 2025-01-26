@@ -15,7 +15,9 @@ const DeleteIssueButton = () => {
         </AlertDialog.Description>
         <Flex justify="center" gap="2" className="mt-4">
           <AlertDialog.Action>
-            <Button color="red">Yes, Delete</Button>
+            <Button variant="solid" color="red">
+              Yes, Delete
+            </Button>
           </AlertDialog.Action>
           <AlertDialog.Cancel>
             <Button>Cancel</Button>
