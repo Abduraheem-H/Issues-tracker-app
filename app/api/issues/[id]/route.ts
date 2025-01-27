@@ -52,6 +52,7 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  // await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate delay for loading state testing
   try {
     const { id } = await params;
     const issueId = parseInt(id);
