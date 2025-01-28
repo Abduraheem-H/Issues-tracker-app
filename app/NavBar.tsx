@@ -10,9 +10,9 @@ function NavBar() {
 	const currentPath = usePathname()
 	console.log(currentPath)
 	const links = [
-		{ name: 'Dashboard', href: '/' },
-		{ name: 'Issues', href: '/issues' },
-	]
+    { name: "Dashboard", href: "/" },
+    { name: "Issues", href: "/issues/list" },
+  ];
   return (
 	<nav className='flex space-x-7'>
 		<Link href="/">Logo</Link>

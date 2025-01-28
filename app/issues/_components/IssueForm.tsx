@@ -89,7 +89,7 @@ function IssueForm({ issue }: { issue?: Issue | null }) {
               console.log("Issue created:", response.data);
             }
 
-            router.push("/issues");
+            router.push("/issues/list");
             router.refresh();
           } catch (error) {
             setIsSubmitting(false);
