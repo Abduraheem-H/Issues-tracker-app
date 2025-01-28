@@ -35,6 +35,7 @@ function IssueForm({ issue }: { issue?: Issue | null }) {
   });
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const customToolbarOptions: Options = {
     toolbar: [
@@ -68,33 +69,54 @@ function IssueForm({ issue }: { issue?: Issue | null }) {
 
   return (
     <div className="p-8 max-w-xl">
-      {error && (
-        <Callout.Root variant="soft" className="mb-4" color="red">
-          <Callout.Text>{error}</Callout.Text>
+      {successMessage && (
+        <Callout.Root variant="soft" className="mb-4" color="green">
+          <Callout.Text>{successMessage}</Callout.Text>{" "}
         </Callout.Root>
       )}
+      {error && (
+        <Callout.Root variant="soft" className="mb-4" color="red">
+          <Callout.Text>{error}</Callout.Text>{" "}
+        </Callout.Root>
+      )}{" "}
       <form
         className=" p-4 space-y-4"
         onSubmit={handleSubmit(async (data) => {
           try {
             setIsSubmitting(true);
+            setSuccessMessage(null);
+            setError(null);
+
+            let successMsg = "";
+
             if (issue) {
               const updateResponse = await axios.patch(
-                `/api/${issue.id}`,
+                `/api/issues/${issue.id}`,
                 data
               );
+              successMsg = "Issue updated successfully.";
               console.log("Issue Updated:", updateResponse.data);
             } else {
               const response = await axios.post("/api/issues", data);
+              successMsg = "Issue submitted successfully.";
               console.log("Issue created:", response.data);
             }
-
-            router.push("/issues/list");
-            router.refresh();
+            setSuccessMessage(successMsg);
+            setTimeout(() => {
+              router.push("/issues/list");
+              router.refresh();
+            }, 1500);
           } catch (error) {
             setIsSubmitting(false);
-            setError("Failed to create issue. Please try again.");
-            console.error("Error creating issue:", error);
+
+            if (axios.isAxiosError(error) && error.response?.status === 400) {
+              setError(
+                error.response.data?.message || "Invalid data submitted."
+              );
+            } else {
+              setError("An unexpected error occurred. Please try again.");
+              console.error("Error submitting issue:", error);
+            }
           }
         })}
       >
