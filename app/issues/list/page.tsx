@@ -3,6 +3,7 @@ import IssueStatusBadge from "@/app/components/IssueStatusBadge";
 import Link from "next/link";
 import prisma from "@/prisma/client";
 import IssueToolbar from "./IssueToolbar";
+import IssueNotification from "./IssueNotification";
 
 const IssuesPage = async () => {
   const issues = await prisma.issue.findMany();
@@ -10,6 +11,7 @@ const IssuesPage = async () => {
 
   return (
     <div>
+      <IssueNotification />
       <div className="mb-4">
         <IssueToolbar />
       </div>
