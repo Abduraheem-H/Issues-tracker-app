@@ -10,6 +10,7 @@
     "tailwind:init": "tailwindcss init --ts"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.11.1",
     "@hookform/resolvers": "^5.2.2",
     "@prisma/client": "^6.19.0",
     "@radix-ui/react-icons": "^1.3.2",
