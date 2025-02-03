@@ -13,43 +13,17 @@ import {
 } from "@radix-ui/themes";
 
 function NavBar() {
-  const currentPath = usePathname();
-  const { data: session, status } = useSession();
-
-  const links = [
-    { name: "Dashboard", href: "/" },
-    { name: "Issues", href: "/issues/list" },
-  ];
-
   return (
-    <nav className="border-b mb-5 px-5 py-3">
+    <nav className="border-b border-zinc-400 mb-5 px-5 py-3">
       <Container>
         <Flex justify="between" align="center">
           <Flex align="center" gap="5">
             <Link href="/" className="text-xl">
               🐞
             </Link>{" "}
-            <ul className="flex space-x-5">
-              {links.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    className={classNames({
-                      "text-zinc-900 font-medium": currentPath === link.href,
-                      "text-zinc-500 hover:text-zinc-800 transition-colors":
-                        currentPath !== link.href,
-                    })}
-                    href={link.href}
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <Navlink />
           </Flex>
-
-          <Box>
-            <AuthStatus session={session} status={status} />
-          </Box>
+          <AuthStatus />
         </Flex>
       </Container>
     </nav>
@@ -58,12 +32,34 @@ function NavBar() {
 
 export default NavBar;
 
-interface AuthStatusProps {
-  session: import("next-auth").Session | null;
-  status: "loading" | "authenticated" | "unauthenticated";
-}
+const Navlink = () => {
+  const currentPath = usePathname();
+  const links = [
+    { name: "Dashboard", href: "/" },
+    { name: "Issues", href: "/issues/list" },
+  ];
+  return (
+    <ul className="flex space-x-5">
+      {links.map((link) => (
+        <li key={link.href}>
+          <Link
+            className={classNames({
+              "text-zinc-900 font-medium": currentPath === link.href,
+              "text-zinc-500 hover:text-zinc-800 transition-colors":
+                currentPath !== link.href,
+            })}
+            href={link.href}
+          >
+            {link.name}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+};
 
-const AuthStatus = ({ session, status }: AuthStatusProps) => {
+const AuthStatus = () => {
+  const { data: session, status } = useSession();
   if (status === "loading") return <Box>Loading...</Box>;
 
   if (status === "unauthenticated") {
@@ -78,25 +74,27 @@ const AuthStatus = ({ session, status }: AuthStatusProps) => {
   }
 
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <Avatar
-          src={session!.user!.image!}
-          fallback="?"
-          size="2"
-          radius="full"
-          className="cursor-pointer"
-          referrerPolicy="no-referrer"
-        />
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.Label>
-          <Text size="2">{session!.user!.email}</Text>
-        </DropdownMenu.Label>
-        <DropdownMenu.Item>
-          <Link href="/api/auth/signout">Log Out</Link>
-        </DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+    <Box>
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <Avatar
+            src={session!.user!.image!}
+            fallback="?"
+            size="2"
+            radius="full"
+            className="cursor-pointer"
+            referrerPolicy="no-referrer"
+          />
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Label>
+            <Text size="2">{session!.user!.email}</Text>
+          </DropdownMenu.Label>
+          <DropdownMenu.Item>
+            <Link href="/api/auth/signout">Log Out</Link>
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    </Box>
   );
 };
