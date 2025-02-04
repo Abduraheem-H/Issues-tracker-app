@@ -68,7 +68,7 @@ const AuthStatus = () => {
         className="text-zinc-500 hover:text-zinc-800"
         href="/api/auth/signin"
       >
-        Log In
+        Login
       </Link>
     );
   }
