@@ -1,22 +1,27 @@
 "use client";
 import { User } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useState, useEffect } from "react";
 
 const AssigneeSelect = () => {
-  const [user, setUser] = useState<User[] | null>(null);
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get("/api/users");
-        setUser(response.data);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
-    fetchUsers();
-  }, []);
+  const {
+    data: users,
+    error,
+    isLoading,
+  } = useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const response = await axios.get("/api/users");
+      return response.data as User[];
+    },
+    staleTime: 60 * 1000, // 1 minute,
+    retry: 3,
+  });
+  if (isLoading) {
+    return <div>Loading users...</div>;
+  }
+  if (error) return <div>Error loading users</div>;
 
   return (
     <Select.Root>
@@ -25,7 +30,7 @@ const AssigneeSelect = () => {
         <Select.Group>
           <Select.Label>Assign</Select.Label>
 
-          {user?.map((u) => (
+          {users?.map((u) => (
             <Select.Item key={u.id} value={u.id}>
               {u.name}
             </Select.Item>
