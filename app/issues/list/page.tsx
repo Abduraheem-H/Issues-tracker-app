@@ -4,11 +4,21 @@ import Link from "next/link";
 import prisma from "@/prisma/client";
 import IssueToolbar from "./IssueToolbar";
 import IssueNotification from "./IssueNotification";
+import { IssueStatus } from "@prisma/client";
 
-const IssuesPage = async () => {
-  const issues = await prisma.issue.findMany();
-  // await new Promise((r) => setTimeout(r, 2000)); // Simulate delay for loading state testing
+interface Props {
+  searchParams: Promise<{ status?: IssueStatus | undefined | "ALL" }>;
+}
 
+const IssuesPage = async ({ searchParams }: Props) => {
+  const status = (await searchParams).status || "ALL";
+  console.log("Filtering issues with status:", status);
+  console.log("Search Params:", (await searchParams).status);
+
+  const issues = await prisma.issue.findMany({
+    where: status !== "ALL" ? { status } : {},
+    orderBy: { createdAt: "desc" },
+  });
   return (
     <div>
       <IssueNotification />
