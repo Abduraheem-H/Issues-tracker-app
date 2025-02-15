@@ -1,17 +1,7 @@
-import Pagination from "./issues/_components/Pagination";
-
-export default function Home({
-  searchParams,
-}: {
-  searchParams?: { page?: string };
-}) {
+export default function Home() {
   return (
     <main>
-      <Pagination
-        itemsCount={100}
-        pageSize={10}
-        currentPage={searchParams?.page ? parseInt(searchParams.page) : 1}
-      />
+      <h1>Welcome to the Issue Tracker</h1>
     </main>
   );
 }

@@ -6,11 +6,13 @@ import IssueToolbar from "./IssueToolbar";
 import IssueNotification from "./IssueNotification";
 import { IssueStatus } from "@prisma/client";
 import { ChevronUpIcon, ChevronDownIcon } from "@radix-ui/react-icons";
+import Pagination from "../_components/Pagination";
 
 interface Props {
   searchParams: Promise<{
     status?: IssueStatus | "ALL";
     sort?: string;
+    page?: string;
   }>;
 }
 
@@ -19,8 +21,12 @@ const IssuesPage = async ({ searchParams }: Props) => {
 
   const status = params.status || "ALL";
   const sort = params.sort || "createdAt_desc";
+  const page = params.page ? parseInt(params.page) : 1;
 
-  // Parse sort parameter
+  const pageSize = 10;
+  const skip = (page - 1) * pageSize;
+
+  // Sorting logic
   const [sortField, sortDirection] = sort.split("_");
   const isAsc = sortDirection === "asc";
 
@@ -33,17 +39,23 @@ const IssuesPage = async ({ searchParams }: Props) => {
   if (sort === "status_asc") orderBy = { status: "asc" };
   if (sort === "status_desc") orderBy = { status: "desc" };
 
+  // Count all issues for pagination
+  const totalIssues = await prisma.issue.count({
+    where: status !== "ALL" ? { status } : {},
+  });
+
+  // Fetch paginated issues
   const issues = await prisma.issue.findMany({
     where: status !== "ALL" ? { status } : {},
     orderBy,
+    skip,
+    take: pageSize,
   });
 
   const getSortUrl = (field: string) => {
     const params = new URLSearchParams();
 
-    if (status && status !== "ALL") {
-      params.set("status", status);
-    }
+    if (status && status !== "ALL") params.set("status", status);
 
     if (sortField === field) {
       params.set("sort", `${field}_${isAsc ? "desc" : "asc"}`);
@@ -52,12 +64,13 @@ const IssuesPage = async ({ searchParams }: Props) => {
       params.set("sort", `${field}_${defaultDirection}`);
     }
 
+    params.set("page", "1");
+
     return `/issues/list?${params.toString()}`;
   };
 
   const renderSortIcon = (field: string) => {
     if (sortField !== field) return null;
-
     return isAsc ? (
       <ChevronUpIcon className="inline ml-1" />
     ) : (
@@ -71,36 +84,28 @@ const IssuesPage = async ({ searchParams }: Props) => {
       <div className="mb-4">
         <IssueToolbar />
       </div>
+
       <Table.Root variant="surface" className="mt-4 w-full">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell className="cursor-pointer hover:bg-gray-50">
-              <Link
-                href={getSortUrl("title")}
-                className="flex items-center hover:text-blue-600 transition-colors"
-              >
-                Issue
-                {renderSortIcon("title")}
+            <Table.ColumnHeaderCell>
+              <Link href={getSortUrl("title")} className="flex items-center">
+                Issue {renderSortIcon("title")}
               </Link>
             </Table.ColumnHeaderCell>
 
-            <Table.ColumnHeaderCell className="hidden md:table-cell cursor-pointer hover:bg-gray-50">
-              <Link
-                href={getSortUrl("status")}
-                className="flex items-center hover:text-blue-600 transition-colors"
-              >
-                Status
-                {renderSortIcon("status")}
+            <Table.ColumnHeaderCell className="hidden md:table-cell">
+              <Link href={getSortUrl("status")} className="flex items-center">
+                Status {renderSortIcon("status")}
               </Link>
             </Table.ColumnHeaderCell>
 
-            <Table.ColumnHeaderCell className="hidden md:table-cell cursor-pointer hover:bg-gray-50">
+            <Table.ColumnHeaderCell className="hidden md:table-cell">
               <Link
                 href={getSortUrl("createdAt")}
-                className="flex items-center hover:text-blue-600 transition-colors"
+                className="flex items-center"
               >
-                Created
-                {renderSortIcon("createdAt")}
+                Created {renderSortIcon("createdAt")}
               </Link>
             </Table.ColumnHeaderCell>
           </Table.Row>
@@ -110,10 +115,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
           {issues.map((issue) => (
             <Table.Row key={issue.id}>
               <Table.Cell>
-                <Link
-                  href={`/issues/${issue.id}`}
-                  className="text-blue-600 hover:underline"
-                >
+                <Link href={`/issues/${issue.id}`} className="text-blue-600">
                   {issue.title}
                   <div className="block md:hidden">
                     <IssueStatusBadge status={issue.status} />
@@ -132,6 +134,12 @@ const IssuesPage = async ({ searchParams }: Props) => {
           ))}
         </Table.Body>
       </Table.Root>
+
+      <Pagination
+        itemsCount={totalIssues}
+        pageSize={pageSize}
+        currentPage={page}
+      />
     </div>
   );
 };
