@@ -5,6 +5,7 @@ import prisma from "@/prisma/client";
 import IssueToolbar from "./IssueToolbar";
 import IssueNotification from "./IssueNotification";
 import { IssueStatus } from "@prisma/client";
+import { ChevronUpIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 
 interface Props {
   searchParams: Promise<{
@@ -18,6 +19,10 @@ const IssuesPage = async ({ searchParams }: Props) => {
 
   const status = params.status || "ALL";
   const sort = params.sort || "createdAt_desc";
+
+  // Parse sort parameter
+  const [sortField, sortDirection] = sort.split("_");
+  const isAsc = sortDirection === "asc";
 
   let orderBy: { [key: string]: "asc" | "desc" } = { createdAt: "desc" };
 
@@ -33,6 +38,33 @@ const IssuesPage = async ({ searchParams }: Props) => {
     orderBy,
   });
 
+  const getSortUrl = (field: string) => {
+    const params = new URLSearchParams();
+
+    if (status && status !== "ALL") {
+      params.set("status", status);
+    }
+
+    if (sortField === field) {
+      params.set("sort", `${field}_${isAsc ? "desc" : "asc"}`);
+    } else {
+      const defaultDirection = field === "status" ? "asc" : "desc";
+      params.set("sort", `${field}_${defaultDirection}`);
+    }
+
+    return `/issues/list?${params.toString()}`;
+  };
+
+  const renderSortIcon = (field: string) => {
+    if (sortField !== field) return null;
+
+    return isAsc ? (
+      <ChevronUpIcon className="inline ml-1" />
+    ) : (
+      <ChevronDownIcon className="inline ml-1" />
+    );
+  };
+
   return (
     <div>
       <IssueNotification />
@@ -42,12 +74,34 @@ const IssuesPage = async ({ searchParams }: Props) => {
       <Table.Root variant="surface" className="mt-4 w-full">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell>Issue</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Status
+            <Table.ColumnHeaderCell className="cursor-pointer hover:bg-gray-50">
+              <Link
+                href={getSortUrl("title")}
+                className="flex items-center hover:text-blue-600 transition-colors"
+              >
+                Issue
+                {renderSortIcon("title")}
+              </Link>
             </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Created
+
+            <Table.ColumnHeaderCell className="hidden md:table-cell cursor-pointer hover:bg-gray-50">
+              <Link
+                href={getSortUrl("status")}
+                className="flex items-center hover:text-blue-600 transition-colors"
+              >
+                Status
+                {renderSortIcon("status")}
+              </Link>
+            </Table.ColumnHeaderCell>
+
+            <Table.ColumnHeaderCell className="hidden md:table-cell cursor-pointer hover:bg-gray-50">
+              <Link
+                href={getSortUrl("createdAt")}
+                className="flex items-center hover:text-blue-600 transition-colors"
+              >
+                Created
+                {renderSortIcon("createdAt")}
+              </Link>
             </Table.ColumnHeaderCell>
           </Table.Row>
         </Table.Header>

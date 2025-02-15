@@ -25,3 +25,11 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   padding: 1rem;
 }
+/* Add to your global.css or component */
+.sortable-header {
+  transition: background-color 0.2s ease;
+}
+
+.sortable-header:hover {
+  background-color: #f9fafb;
+}
