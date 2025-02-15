@@ -1,7 +1,9 @@
+import Pagination from "./issues/_components/Pagination";
+
 export default function Home() {
   return (
     <main>
-    <h1>Welcome to the Home Page</h1>
+      <Pagination itemsCount={100} pageSize={10} currentPage={5} />
     </main>
   );
 }
