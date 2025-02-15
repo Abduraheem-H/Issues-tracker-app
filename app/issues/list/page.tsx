@@ -7,18 +7,32 @@ import IssueNotification from "./IssueNotification";
 import { IssueStatus } from "@prisma/client";
 
 interface Props {
-  searchParams: Promise<{ status?: IssueStatus | undefined | "ALL" }>;
+  searchParams: Promise<{
+    status?: IssueStatus | "ALL";
+    sort?: string;
+  }>;
 }
 
 const IssuesPage = async ({ searchParams }: Props) => {
-  const status = (await searchParams).status || "ALL";
-  console.log("Filtering issues with status:", status);
-  console.log("Search Params:", (await searchParams).status);
+  const params = await searchParams;
+
+  const status = params.status || "ALL";
+  const sort = params.sort || "createdAt_desc";
+
+  let orderBy: { [key: string]: "asc" | "desc" } = { createdAt: "desc" };
+
+  if (sort === "createdAt_asc") orderBy = { createdAt: "asc" };
+  if (sort === "createdAt_desc") orderBy = { createdAt: "desc" };
+  if (sort === "title_asc") orderBy = { title: "asc" };
+  if (sort === "title_desc") orderBy = { title: "desc" };
+  if (sort === "status_asc") orderBy = { status: "asc" };
+  if (sort === "status_desc") orderBy = { status: "desc" };
 
   const issues = await prisma.issue.findMany({
     where: status !== "ALL" ? { status } : {},
-    orderBy: { createdAt: "desc" },
+    orderBy,
   });
+
   return (
     <div>
       <IssueNotification />
