@@ -1,7 +1,9 @@
+import LatestIssues from "./LatestIssues";
+
 export default function Home() {
   return (
     <main>
-      <h1>Welcome to the Issue Tracker</h1>
+      <LatestIssues />
     </main>
   );
 }
