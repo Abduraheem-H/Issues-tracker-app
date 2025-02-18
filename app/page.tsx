@@ -17,9 +17,9 @@ const HomePage = async () => {
   return (
     <div>
       <IssueSummary
-        openCount={openCount}
-        inProgressCount={inProgressCount}
-        closedCount={closedCount}
+        open={openCount}
+        inProgress={inProgressCount}
+        closed={closedCount}
       />
     </div>
   );

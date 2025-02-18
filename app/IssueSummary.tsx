@@ -1,53 +1,56 @@
 "use client";
 
-import { Card, Flex, Heading, Text } from "@radix-ui/themes";
 import Link from "next/link";
+import { Card, Flex, Text } from "@radix-ui/themes";
 
 interface IssueSummaryProps {
-  openCount: number;
-  inProgressCount: number;
-  closedCount: number;
+  open: number;
+  inProgress: number;
+  closed: number;
 }
 
-const IssueSummary = ({
-  openCount,
-  inProgressCount,
-  closedCount,
-}: IssueSummaryProps) => {
+const IssueSummary = ({ open, inProgress, closed }: IssueSummaryProps) => {
+  const summaryItems = [
+    { label: "Open Issues", value: open, status: "OPEN" },
+    { label: "In-Progress Issues", value: inProgress, status: "IN_PROGRESS" },
+    { label: "Closed Issues", value: closed, status: "CLOSED" },
+  ];
+
   return (
-    <Flex gap="4" direction={{ initial: "column", sm: "row" }}>
-      <Card>
-        <Flex direction="column" align="start" gap="2">
-          <Heading size="5">{openCount}</Heading>
-          <Link href="/issues/list?status=OPEN">
-            <Text size="3" weight="medium" color="blue">
-              Open Issues
+    <Flex
+      gap="4"
+      justify="between"
+      direction={{ initial: "column", sm: "row" }}
+    >
+      {summaryItems.map((item) => (
+        <Card
+          key={item.status}
+          style={{
+            width: "100%",
+            padding: "20px",
+            borderRadius: "12px",
+          }}
+        >
+          <Flex direction="column" align="start">
+            <Text size="6" weight="bold">
+              {item.value}
             </Text>
-          </Link>
-        </Flex>
-      </Card>
 
-      <Card>
-        <Flex direction="column" align="start" gap="2">
-          <Heading size="5">{inProgressCount}</Heading>
-          <Link href="/issues/list?status=IN_PROGRESS">
-            <Text size="3" weight="medium" color="blue">
-              In-Progress Issues
-            </Text>
-          </Link>
-        </Flex>
-      </Card>
-
-      <Card>
-        <Flex direction="column" align="start" gap="2">
-          <Heading size="5">{closedCount}</Heading>
-          <Link href="/issues/list?status=CLOSED">
-            <Text size="3" weight="medium" color="blue">
-              Closed Issues
-            </Text>
-          </Link>
-        </Flex>
-      </Card>
+            <Link
+              href={`/issues/list?status=${item.status}`}
+              style={{
+                marginTop: "6px",
+                fontSize: "16px",
+                color: "#1a73e8",
+                fontWeight: 500,
+                textDecoration: "none",
+              }}
+            >
+              {item.label}
+            </Link>
+          </Flex>
+        </Card>
+      ))}
     </Flex>
   );
 };
