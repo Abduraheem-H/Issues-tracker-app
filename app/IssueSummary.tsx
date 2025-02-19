@@ -41,34 +41,37 @@ const IssueSummary = ({ open, inProgress, closed }: IssueSummaryProps) => {
       {summaryItems.map((item) => (
         <Card
           key={item.status}
+          asChild
           style={{
             width: "100%",
             padding: "20px",
             borderRadius: "12px",
+            cursor: "pointer",
           }}
         >
-          <Flex align="center" gap="3">
-            {item.icon}
+          <Link
+            href={`/issues/list?status=${item.status}`}
+            style={{ textDecoration: "none" }}
+          >
+            <Flex align="center" gap="3">
+              {item.icon}
 
-            <Flex direction="column" align="start">
-              <Text size="6" weight="bold">
-                {item.value}
-              </Text>
+              <Flex direction="column" align="start">
+                <Text size="6" weight="bold" color="gray">
+                  {item.value}
+                </Text>
 
-              <Link
-                href={`/issues/list?status=${item.status}`}
-                style={{
-                  marginTop: "6px",
-                  fontSize: "16px",
-                  color: "#1a73e8",
-                  fontWeight: 500,
-                  textDecoration: "none",
-                }}
-              >
-                {item.label}
-              </Link>
+                <Text
+                  size="3"
+                  weight="medium"
+                  color="blue"
+                  style={{ marginTop: "6px" }}
+                >
+                  {item.label}
+                </Text>
+              </Flex>
             </Flex>
-          </Flex>
+          </Link>
         </Card>
       ))}
     </Flex>
