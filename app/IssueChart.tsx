@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, Text } from "@radix-ui/themes";
+import { Card } from "@radix-ui/themes";
 import {
   ResponsiveContainer,
   BarChart,
@@ -29,9 +29,6 @@ const IssueChart = ({ open, inProgress, closed }: Props) => {
     <Card
       style={{ padding: 20, width: "100%", maxWidth: 700, margin: "0 auto" }}
     >
-      <Text size="4" weight="bold" style={{ marginBottom: 16 }}>
-        Issue Status Overview
-      </Text>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart
           data={data}
