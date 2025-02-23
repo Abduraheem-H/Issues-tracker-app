@@ -3,6 +3,7 @@ import DashboardLeft from "./DashboardLeft";
 import LatestIssues from "./LatestIssues";
 import prisma from "@/prisma/client";
 import Link from "next/link";
+import { Metadata } from "next";
 
 export default async function HomePage() {
   const openCount = await prisma.issue.count({ where: { status: "OPEN" } });
@@ -13,14 +14,12 @@ export default async function HomePage() {
 
   return (
     <Grid columns={{ initial: "1", md: "2" }} gap="8">
-      {/* Left Column */}
       <DashboardLeft
         open={openCount}
         inProgress={inProgressCount}
         closed={closedCount}
       />
 
-      {/* Right Column: Latest Issues */}
       <Card
         style={{
           padding: "16px",
@@ -48,3 +47,8 @@ export default async function HomePage() {
     </Grid>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Dashboard - Issue Tracker",
+  description: "Overview of issue statuses and latest issues",
+};

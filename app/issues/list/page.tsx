@@ -5,6 +5,7 @@ import Pagination from "../_components/Pagination";
 import { parseSortParam } from "./_components/useSortParams";
 import { fetchIssues, countIssues } from "./_components/issueService";
 import { IssueStatus } from "@prisma/client";
+import { Metadata } from "next";
 
 interface Props {
   searchParams: Promise<{
@@ -52,4 +53,8 @@ const IssuesPage = async ({ searchParams }: Props) => {
 };
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "Issues - Issue Tracker",
+  description: "Manage and track project issues",
+};
 export default IssuesPage;
