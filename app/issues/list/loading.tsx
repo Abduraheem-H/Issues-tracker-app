@@ -1,7 +1,6 @@
 import { Table } from "@radix-ui/themes";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
-// @ts-expect-error Skeleton CSS import
 import "react-loading-skeleton/dist/skeleton.css";
 import IssueToolbar from "./IssueToolbar";
 

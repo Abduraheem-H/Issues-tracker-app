@@ -9,8 +9,6 @@ import { Suspense, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { issueSchema } from "../../validationSchema";
-
-// @ts-expect-error - no types available for this CSS side-effect import
 import "easymde/dist/easymde.min.css";
 import Spinner from "@/app/components/Spinner";
 import { Issue } from "@prisma/client";
