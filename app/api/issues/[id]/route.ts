@@ -6,14 +6,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {
-    const { id } = await params;
+    const { id } = context.params;
     const issueId = parseInt(id);
     if (isNaN(issueId)) {
       return NextResponse.json(
@@ -21,6 +21,7 @@ export async function PATCH(
         { status: 400 }
       );
     }
+
     const body = await request.json();
 
     const validation = updateIssueSchema.safeParse(body);
