@@ -88,7 +88,7 @@ const IssueSummary = ({ open, inProgress, closed }: IssueSummaryProps) => {
             <Flex align="center" gap="3">
               {item.icon}
               <Flex direction="column" align="start">
-                <Text size="6" weight="bold" color={item.color}>
+                <Text size="6" weight="bold" style={{ color: item.color }}>
                   {item.value}
                 </Text>
                 <Text
