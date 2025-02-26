@@ -71,15 +71,15 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  // await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate delay for loading state testing
+
   try {
-    const { id } = await params;
+    const { id } = await context.params;
     const issueId = parseInt(id);
     if (isNaN(issueId)) {
       return NextResponse.json(
