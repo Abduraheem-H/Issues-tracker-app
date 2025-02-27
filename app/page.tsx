@@ -47,6 +47,7 @@ export default async function HomePage() {
     </Grid>
   );
 }
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Dashboard - Issue Tracker",
