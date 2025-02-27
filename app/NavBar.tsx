@@ -59,6 +59,7 @@ const Navlink = () => {
 };
 
 const AuthStatus = () => {
+  const currentPath = usePathname();
   const { data: session, status } = useSession();
   if (status === "loading") return <Box>Loading...</Box>;
 
@@ -66,7 +67,7 @@ const AuthStatus = () => {
     return (
       <Link
         className="text-zinc-500 hover:text-zinc-800"
-        href="/api/auth/signin"
+        href={`/api/auth/signin?callbackUrl=${encodeURIComponent(currentPath)}`}
       >
         Login
       </Link>
@@ -91,7 +92,7 @@ const AuthStatus = () => {
             <Text size="2">{session!.user!.email}</Text>
           </DropdownMenu.Label>
           <DropdownMenu.Item>
-            <Link href="/api/auth/signout">Log Out</Link>
+            <Link href="/api/auth/signout?callbackUrl=/">Log Out</Link>
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Root>
